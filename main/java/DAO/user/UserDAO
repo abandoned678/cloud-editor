@@ -1,0 +1,12 @@
+package com.nic.DAO.user;
+
+import com.nic.pojo.users;
+
+import java.sql.Connection;
+import java.sql.SQLException;
+
+public interface UserDao {
+    //得到登录的用户
+    public users getLoginUser(Connection conn, String username) throws SQLException;
+
+}
