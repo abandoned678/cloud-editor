@@ -1,0 +1,40 @@
+package com.nic.service;
+
+import com.nic.DAO.BaseDAO;
+import com.nic.DAO.user.UserDao;
+import com.nic.DAO.user.UserDaoImpl;
+import com.nic.pojo.users;
+import org.junit.jupiter.api.Test;
+
+import java.sql.Connection;
+import java.sql.SQLException;
+
+public class usersServiceImpl implements usersService{
+    /**
+     * @param username
+     * @param password
+     * @return
+     */
+
+    private UserDao userDao;
+    public usersServiceImpl(){
+        userDao = new UserDaoImpl();
+    }
+    @Override
+    public users login(String username, String password) {
+
+        Connection conn = null;
+        users user = null;
+
+        try{
+            conn= BaseDAO.getConnection();
+            user =userDao.getLoginUser(conn,username);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }finally {
+            BaseDAO.close(conn,null,null);
+        }
+
+
+        return user;
+    }
