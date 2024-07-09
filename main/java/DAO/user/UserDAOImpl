@@ -1,0 +1,55 @@
+package com.nic.DAO.user;
+
+import com.nic.DAO.BaseDAO;
+import com.nic.pojo.users;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+public class UserDaoImpl implements UserDao{
+    /**
+     * @param conn
+     * @param username
+     * @return
+     */
+    @Override
+    public users getLoginUser(Connection conn, String username) {
+
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        users user = null;
+
+        if (conn!=null){
+            String sql = "select * from users where username=?";
+            Object[] params = {username};
+
+
+            try {
+                rs =BaseDAO.execute(conn,sql,params,rs,ps);
+                if(rs.next()){
+                    user=new users();
+                    user.setId(rs.getInt("id"));
+                    user.setUsername(rs.getString("username"));
+                    user.setPassword(rs.getString("password"));
+                    user.setEmail(rs.getString("email"));
+                    user.setCreatedAt(rs.getTimestamp("created_at"));
+                    user.setUpdatedAt(rs.getTimestamp("updated_at"));
+                    user.setActive(rs.getInt("is_active") == 1);
+                }
+                BaseDAO.close(null,ps,rs);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+
+
+        }
+
+
+
+
+
+        return user;
+    }
+}
